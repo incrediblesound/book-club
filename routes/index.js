@@ -67,7 +67,7 @@ exports.savenote = function(req, res) {
       whodunnit: req.user.username,
       category: "note",
       actionRef: thisnote._id,
-      description: req.user.name + " has written a note called " + thisnote.title
+      description: req.user.name + " has written a note called " + thisnote.name
     }).save(function (err, thisaction) {
       res.redirect('/notes');
     })
