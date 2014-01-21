@@ -3,5 +3,38 @@ extends layout
 block content
 
   div.container
-    h1 Welcome 
-      =user.name
+    nav(class="navbar navbar-default" role="navigation")
+      ul(class="nav navbar-nav")
+        li.active 
+          a Home
+        li
+          a(href='/logout') Log out
+        form(class="navbar-form navbar-left" role="search")
+          div(class="form-group")    
+            input(type="text" class="form-control" placeholder="Search")
+          button(type="submit" class="btn btn-default") Search
+    div.row
+    div.col-md-8      
+      h1 Welcome 
+        =user.name
+      hr
+      - for(i=0;i<actions.length;i++)
+        - if(actions[i].category === "note")
+          div.news
+            ul(style="display:inline;")
+              li
+                h3
+                  span(class="label label-info") Note
+                p= actions[i].description
+                a(href='notes/#{actions[i].actionRef}')
+
+
+    div.col-md-4
+      div.btn-group-vertical
+        a(href="/notes") Notes
+        button(class="btn btn-default") 
+          a(href='/list') Book Lists
+        button(class="btn btn-default") 
+          a(href='/review') Book Reviews
+        button(class="btn btn-default") 
+          a(href='/profile') Profile

@@ -21,11 +21,15 @@ var BookReview = new Schema({
 	tags: Array
 });
 
+var review = mongoose.model('review', BookReview);
+
 var BookList = new Schema({
 	title: String,
 	items: Array,
 	listBy: String
 })
+
+var list = mongoose.model('list', BookList);
 
 var Note = new Schema({
 	name: String,
@@ -34,9 +38,25 @@ var Note = new Schema({
 	tags: Array
 })
 
+var note = mongoose.model('note', Note);
+
 var Action = new Schema({
 	DateTime: Date,
+	whodunnit: String,
+	category: String, //note, review, list, request
+	actionRef: String,
+	description: String
 
 })
+
+var action = mongoose.model('action', Action);
+
+var newsItem = new Schema({
+	userID: String,
+	actionID: String,
+	Relevancy: Date
+})
+
+var newsItem = mongoose.model('newsItem', newsItem);
 
 mongoose.connect('mongodb://localhost/book');

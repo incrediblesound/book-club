@@ -63,6 +63,8 @@ passport.deserializeUser(function(id, done) {
 app.get('/', routes.title);
 app.post('/register', routes.register);
 app.get('/main', routes.main);
+app.get('/notes', routes.notes);
+app.post('/savenote', routes.savenote);
 app.post('/login', passport.authenticate('local'),
 function(req, res) {
   res.redirect('/main');

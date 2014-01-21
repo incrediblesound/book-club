@@ -5,6 +5,8 @@
 var mongoose = require('mongoose');
 var passport = require('passport');
 var member = mongoose.model('member');
+var note = mongoose.model('note');
+var action = mongoose.model('action');
 
 exports.title = function(req, res) {
 	res.render('title')
@@ -38,7 +40,36 @@ exports.register = function(req, res) {
 }
 
 exports.main = function(req, res) {
-  res.render('main', {
+  action.find().sort({DateTime:1}).limit(20).exec(function (err, actions, count) {
+    res.render('main', {
+    user: req.user,
+    actions: actions
+    });
+  }) 
+}
+
+exports.notes = function(req, res) {
+  res.render('notes', {
     user: req.user
-  });
+  })
+}
+
+exports.savenote = function(req, res) {
+  var title = req.body.title;
+  var body = req.body.title;
+  new note({
+    name: title,
+    noteby: req.user.username,
+    content: body
+  }).save(function (err, thisnote) {
+    new action({
+      DateTime: Date.now(),
+      whodunnit: req.user.username,
+      category: "note",
+      actionRef: thisnote._id,
+      description: req.user.name + " has written a note called " + thisnote.title
+    }).save(function (err, thisaction) {
+      res.redirect('/notes');
+    })
+  })
 }
