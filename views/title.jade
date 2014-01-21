@@ -1,0 +1,25 @@
+extends layout
+
+block content
+
+  div.container
+    div.row
+      div.col-md-6
+        h1.text-center Book Club
+        div.spacer
+        img(src="./image/titleimage.jpeg" height="320" width="540")
+        h3.text-center A space for book lovers
+      div.col-md-6
+        h1 Sign up to share your passion!
+        div.spacer
+        form(method='post' action='/register')
+          div.form-group
+            label(for="name") Your Name:
+            input(type="text" id="name" name="name" required)
+          div.form-group
+            label(for="email") Your E-Mail:
+            input(type="text" id="email" name="email" required)
+          div.form-group
+            label(for="pass") Password:
+            input(type="password" id="pass" name="password" required)
+          input(type="submit" class="btn btn-default" value="JOIN")
