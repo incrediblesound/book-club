@@ -16,11 +16,11 @@ exports.index = function(req, res) {
 
 exports.register = function(req, res) {
 	var name = req.body.name;
-	var email = req.body.email;
+	var username = req.body.username;
   var password = req.body.password;
 	new member({
 		name: name,
-		email: email,
+		username: username,
 		password: password,
 		joined: Date.now()
 	}).save(function (err, user) {
@@ -38,5 +38,7 @@ exports.register = function(req, res) {
 }
 
 exports.main = function(req, res) {
-  res.render('main');
+  res.render('main', {
+    user: req.user
+  });
 }

@@ -17,9 +17,18 @@ block content
             label(for="name") Your Name:
             input(type="text" id="name" name="name" required)
           div.form-group
-            label(for="email") Your E-Mail:
-            input(type="text" id="email" name="email" required)
+            label(for="username") Your Username:
+            input(type="text" id="username" name="username" required)
           div.form-group
             label(for="pass") Password:
             input(type="password" id="pass" name="password" required)
           input(type="submit" class="btn btn-default" value="JOIN")
+        div.spacer
+        span(class="label label-primary") Member Login
+        div.spacer
+        form(method='post' action='/login')
+          div.form-group
+            input(type='text' class="form-control" placeholder="username" name='username' width="200")
+          div.form-group
+            input(type='password' class="form-control" placeholder="password" name='password' width="200")
+          input(type='submit' class="btn btn-success" value='login')

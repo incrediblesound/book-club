@@ -36,11 +36,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 passport.use(new LocalStrategy(
-	function(email,password,done) {
-		member.findOne({ email: email }, function(err,user){
+	function(username,password,done) {
+		member.findOne({ username: username }, function(err,user){
 			if(err) { return done(err); }
 			if(!user) {
-				return done(null, false, { message: 'incorrect email' });
+				return done(null, false, { message: 'incorrect username' });
 			}
 			if(password !== user.password) {
 				return done(null, false, { message: 'incorrect password' });
@@ -62,7 +62,11 @@ passport.deserializeUser(function(id, done) {
 
 app.get('/', routes.title);
 app.post('/register', routes.register);
-app.get('/main', routes.main)
+app.get('/main', routes.main);
+app.post('/login', passport.authenticate('local'),
+function(req, res) {
+  res.redirect('/main');
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
