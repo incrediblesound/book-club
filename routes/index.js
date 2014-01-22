@@ -49,9 +49,13 @@ exports.main = function(req, res) {
 }
 
 exports.notes = function(req, res) {
-  res.render('notes', {
-    user: req.user
-  })
+  note.find({noteby: req.user.username}).exec(function (err, notes) {
+    console.log(notes);
+    res.render('notes', {
+    user: req.user,
+    notes: notes
+    })
+  }) 
 }
 
 exports.savenote = function(req, res) {

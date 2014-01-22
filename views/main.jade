@@ -21,20 +21,23 @@ block content
       - for(i=0;i<actions.length;i++)
         - if(actions[i].category === "note")
           div.news
-            ul(style="display:inline;")
-              li
-                h3
-                  span(class="label label-info") Note
-                p= actions[i].description
-                a(href='notes/#{actions[i].actionRef}') Check it out!
-
-
+            h1
+              span(class="label label-info tab") N
+            p= actions[i].description
+            p On
+              = actions[i].DateTime
+              a(href='notes/#{actions[i].actionRef}')  Check it out!
     div.col-md-4
-      div.btn-group-vertical
-        a(href="/notes") Notes
-        button(class="btn btn-default") 
-          a(href='/list') Book Lists
-        button(class="btn btn-default") 
-          a(href='/review') Book Reviews
-        button(class="btn btn-default") 
-          a(href='/profile') Profile
+      div.main-nav
+        div.button
+          h3
+            a(href="/notes") Notes
+        div.button
+          h3
+            a(href='/list') Book Lists
+        div.button
+          h3
+            a(href='/review') Book Reviews
+        div.button
+          h3
+            a(href='/profile') Profile

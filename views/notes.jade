@@ -10,12 +10,19 @@ block content
         li
           a(href='/logout') Log out
     div.row
-    div.col-md-8
-      form(method='post' action='/savenote')
-        div.form-group
-          label(for="title") Title:
-          input(type='text' id='title' name='title' required)
-        div.form-group
-          label(for='content') Content:
-          textarea(name='content' id='content')
-        button(type='submit' class='btn btn-default') Save
+    div.col-md-4
+      button(class="btn btn-default" id="newnote") Write a New Note
+      div.noteform
+        form(method='post' action='/savenote')
+          div.form-group
+            label(for="title") Title:
+            input(type='text' id='title' class='form-control' name='title' required)
+          div.form-group
+            label(for='content') Content:
+            textarea(name='content' class='form-control' id='content')
+          button(type='submit' class='btn btn-default') Save
+    div.col-md-4
+      - each note in notes
+        h2
+          span(class='label label-info')
+            = note.name
