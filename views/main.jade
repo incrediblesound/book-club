@@ -18,26 +18,47 @@ block content
       h1 Welcome 
         =user.name
       hr
-      - for(i=0;i<actions.length;i++)
-        - if(actions[i].category === "note")
+      div.newfeed
+        - each review in reviews
           div.news
-            h1
+            h2
+              span(class="label label-primary tab") R
+            p.lead= review.description
+            p On 
+              = review.DateTime
+              a(href='notes/#{review.actionRef}')  Check it out!
+        - each list in lists
+          div.news
+            h2
+              span(class="label label-success tab") L 
+            p.lead= list.description
+            p On 
+              = list.DateTime
+              a(href='lists/#{list.actionRef}')  Check it out!
+        - each request in requests
+          div.news
+            h2
+              span(class="label label-danger tab") Rq 
+            p.lead= request.description
+            p On 
+              = request.DateTime
+              a(href='lists/#{request.actionRef}')  Check it out!
+        - each note in notes
+          div.news
+            h2
               span(class="label label-info tab") N
-            p= actions[i].description
-            p On
-              = actions[i].DateTime
-              a(href='notes/#{actions[i].actionRef}')  Check it out!
+            p.lead= note.description
+            p On 
+              = note.DateTime
     div.col-md-4
       div.main-nav
-        div.button
-          h3
-            a(href="/notes") Notes
-        div.button
-          h3
-            a(href='/list') Book Lists
-        div.button
-          h3
-            a(href='/review') Book Reviews
-        div.button
-          h3
-            a(href='/profile') Profile
+          h1
+            a(class="btn btn-default btn-lg" href="/notes") Notes
+          h1
+            a(class="btn btn-default btn-lg" href='/lists') Book Lists
+          h1
+            a(class="btn btn-default btn-lg" href='/reviews') Book Reviews
+          h1
+            a(class="btn btn-default btn-lg" href='/profile/#{user.username}') Profile
+          h1
+            a(class="btn btn-default btn-lg" href='/messages') Messages

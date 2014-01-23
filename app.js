@@ -62,9 +62,18 @@ passport.deserializeUser(function(id, done) {
 
 app.get('/', routes.title);
 app.post('/register', routes.register);
+app.get('/memberinfo', routes.memberinfo);
+app.post('/saveinfo', routes.saveinfo);
 app.get('/main', routes.main);
 app.get('/notes', routes.notes);
 app.post('/savenote', routes.savenote);
+app.get('/lists', routes.lists);
+app.post('/follow', routes.follow)
+app.post('/savelist', routes.savelist);
+app.get('/reviews', routes.review);
+app.post('/savereview', routes.savereview);
+app.get('/profile/:username', routes.profile);
+app.get('/logout', routes.logout)
 app.post('/login', passport.authenticate('local'),
 function(req, res) {
   res.redirect('/main');

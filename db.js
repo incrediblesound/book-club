@@ -7,7 +7,10 @@ var Member = new Schema({
 	username: { type: String, index: {unique: true} },
 	password: String,
 	joined: Date,
-	bio: String
+	bio: String,
+	genres: Array,
+	authors: Array,
+	following: Array
 });
 
 var member = mongoose.model('member', Member);
@@ -15,18 +18,18 @@ var member = mongoose.model('member', Member);
 var BookReview = new Schema({
 	title: String,
 	author: String,
-	Subject: String,
 	review: String,
-	reviewBy: String,
+	reviewby: String,
+	genre: String,
 	tags: Array
 });
 
 var review = mongoose.model('review', BookReview);
 
 var BookList = new Schema({
-	title: String,
+	name: String,
 	items: Array,
-	listBy: String
+	listby: String
 })
 
 var list = mongoose.model('list', BookList);
@@ -45,6 +48,8 @@ var Action = new Schema({
 	whodunnit: String,
 	category: String, //note, review, list, request
 	actionRef: String,
+	author: String,
+	genre: String,
 	description: String
 
 })

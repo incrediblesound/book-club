@@ -1,0 +1,44 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default" role="navigation")
+      ul(class="nav navbar-nav")
+        li 
+          a(href='/main') Home
+        li
+          a(href='/logout') Log out
+      ul(class="nav navbar-nav navbar-right")
+        form(method='post' action='/follow')
+          input(type='hidden' value='#{Member.username}' name='member')
+          li
+            input(type='submit' class="btn btn-success" value='follow')
+    div.row
+      h1= Member.name
+      div.col-md-4
+        h2 Bio
+        p= Member.Bio
+      div.col-md-4
+        h2 
+          span(class="label label-default") Lists
+          hr
+          - if (lists !== null)
+            - each list in lists
+              p= list.name
+        h2 
+          span(class="label label-default") Notes
+          hr
+          - if (notes !== null)
+            - each note in notes
+              p= note.name
+          - else
+            p No notes yet!
+      div.col-md-4
+        h2 
+          span(class="label label-default") Reviews
+          hr
+          - if (reviews !== null)
+            - each review in reviews
+              p= review.name
+        
