@@ -1,0 +1,29 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default" role="navigation")
+      ul(class="nav navbar-nav")
+        li 
+          a(href='/main') Home
+        li
+          a(href='/logout') Log out
+    div.row
+      div.col-md-6
+        h2 Message from 
+          = message.sender
+          form(method="post" action="/compose" style="float:right;")
+            input(type="hidden" name="sendto" value="#{message.sender}")
+            input(type="submit" class="btn btn-default" value="Reply")
+        hr
+        h3.lead Title: 
+          = message.title
+        p= message.content
+      div.col-md-6
+        h2 Your Messages
+        hr
+        - each other in others
+          a(class="btn btn-info btn-lg" href="/messages/#{other._id}")
+            = message.title
+            p from #{message.sender}

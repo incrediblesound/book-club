@@ -71,6 +71,10 @@ app.get('/lists', routes.lists);
 app.post('/follow', routes.follow)
 app.post('/savelist', routes.savelist);
 app.get('/reviews', routes.review);
+app.get('/messages', routes.messages);
+app.post('/compose', routes.compose)
+app.get('/messages/:ID', routes.viewMessage)
+app.post('/send', routes.sendMessage)
 app.post('/savereview', routes.savereview);
 app.get('/profile/:username', routes.profile);
 app.get('/logout', routes.logout)

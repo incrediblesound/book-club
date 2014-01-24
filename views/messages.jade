@@ -1,0 +1,26 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default" role="navigation")
+      ul(class="nav navbar-nav")
+        li.active 
+          a Home
+        li
+          a(href='/logout') Log out
+    div.col-md-6
+      h1 Your Messages:
+      hr
+      - each message in mssgs
+        a(href="/messages/#{message._id}" class='btn btn-default')= message.title
+          p from: #{message.sender}
+         View
+    div.col-md-6
+      h1 Your Friends:
+      form(method="post" action="/compose")
+        - each friend in fllwng
+          p= friend.name
+          input(type="checkbox" name="sendto" value="#{friend.username}")
+          br
+        input(type="submit" class="btn btn-default" value="send")

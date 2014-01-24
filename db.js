@@ -64,4 +64,14 @@ var newsItem = new Schema({
 
 var newsItem = mongoose.model('newsItem', newsItem);
 
+var Message = new Schema({
+	title: String,
+	sender: String,
+	recipient: String,
+	content: String,
+	senton: Date
+})
+
+var message = mongoose.model('message', Message);
+
 mongoose.connect('mongodb://localhost/book');

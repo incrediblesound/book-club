@@ -9,6 +9,7 @@ var note = mongoose.model('note');
 var action = mongoose.model('action');
 var list = mongoose.model('list');
 var review = mongoose.model('review');
+var message = mongoose.model('message');
 
 exports.title = function(req, res) {
 	res.render('title')
@@ -217,6 +218,53 @@ exports.savereview = function(req, res) {
     }).save(function (err, thisaction) {
       res.redirect('/reviews')
     })
+  })
+}
+exports.viewMessage = function (req, res) {
+  message.find({recipient: req.user.username}).exec(function (err, messages) {
+    var inside = function(messages) {
+      for(i=0;i<messages.length;i++) {
+        console.log(messages[i]._id)
+        if(messages[i]._id == req.params.ID) {
+          return messages[i];
+        }
+      }
+    }
+    var focus = inside(messages);
+    console.log(focus);
+    res.render('messageview', {
+      message: focus,
+      others: messages
+    })
+  })
+}
+
+exports.messages = function (req, res) {
+  message.find({recipient: req.user.username}).exec(function (err, mssgs) {
+    member.find({username: {$in: req.user.following}}).exec(function (err, fllwng) {
+      res.render('messages', {
+        mssgs: mssgs,
+        fllwng: fllwng
+      })
+    })
+  })
+}
+
+exports.sendMessage = function (req, res) {
+  new message({
+    title: req.body.title,
+    sender: req.user.username,
+    recipient: req.body.sendto,
+    content: req.body.content,
+    senton: Date.now()
+  }).save(function (err, mess) {
+    res.redirect('/messages');
+  })
+}
+
+exports.compose = function (req, res) {
+  res.render('compose', {
+    to: req.body.sendto
   })
 }
 

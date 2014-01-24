@@ -9,11 +9,11 @@ block content
           a(href='/main') Home
         li
           a(href='/logout') Log out
-      ul(class="nav navbar-nav navbar-right")
-        form(method='post' action='/follow')
-          input(type='hidden' value='#{Member.username}' name='member')
+        ul(class="nav navbar-nav navbar-right")
           li
-            input(type='submit' class="btn btn-success" value='follow')
+            form(method='post' action='/follow' class='navbar-form navbar-right')
+              input(type='hidden' value='#{Member.username}' name='member')
+              input(type='submit' class="btn btn-success" value='follow')
     div.row
       h1= Member.name
       div.col-md-4
