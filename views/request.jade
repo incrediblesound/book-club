@@ -1,0 +1,34 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default" role="navigation")
+      ul(class="nav navbar-nav")
+        li 
+          a(href='/main') Home
+        li
+          a(href='/logout') Log out
+    div.row
+    div.col-md-4
+      h3 Write a New Request
+      hr.closeline
+      div.reqform
+        form(method='post' action='/saverequest')
+          div.form-group
+            label(for="name") Name:
+            input(type='text' id='title' class='form-control' name='name' required)
+          div.form-group
+            label(for='content') Content:
+            textarea(name='content' class='form-control')
+          div.form-group
+            label(for='tags') Tags:
+            input(type='text' class='form-control' name='tags')
+          button(type='submit' class='btn btn-default') Save
+    div.col-md-4
+      h1 Your Requests:
+      hr
+      - each request in requests
+        h2
+          a(class='btn btn-danger' href='/requests/#{request._id}')
+            = request.name

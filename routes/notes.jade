@@ -1,0 +1,21 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default" role="navigation")
+      ul(class="nav navbar-nav")
+        li.active 
+          a Home
+        li
+          a(href='/logout') Log out
+    div.row
+    div.col-md-8
+      form(method='post' action='/savenote')
+        div.form-group
+          label(for="title") Title:
+          input(type='text' id='title' name='title' required)
+        div.form-group
+          label(for='content') Content:
+          textarea(name='content' id='content')
+        button(type='submit' class='btn btn-default') Save

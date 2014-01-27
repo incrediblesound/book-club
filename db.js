@@ -72,6 +72,16 @@ var Message = new Schema({
 	senton: Date
 })
 
+var Quest = new Schema({
+	madeby: String,
+	name: String,
+	content: String,
+	tags: Array,
+	madeon: Date
+})
+
+var quest = mongoose.model('quest', Quest);
+
 var message = mongoose.model('message', Message);
 
 mongoose.connect('mongodb://localhost/book');

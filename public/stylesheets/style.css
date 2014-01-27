@@ -11,38 +11,11 @@ a {
 	margin-bottom: 16px;
 }
 
-hr.fancy-line { 
-    border: 0; 
-    height: 1px;
-
-}
-hr.fancy-line:before {
-    top: -0.5em;
-    height: 1em;
-}
-hr.fancy-line:after {
-    content:'';
-    height: 0.5em;
-    top: 1px;
-}
-
-hr.fancy-line:before, hr.fancy-line:after {
-    content: '';
-    position: absolute;
-    width: 100%;
-}
-
-hr.fancy-line, hr.fancy-line:before {
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 75%);
-}
 .news {
-	border-style: solid;
-	border-width: 1px;
-	border-radius: 6px;
-	margin-bottom: 8px;
-	padding: 8px;
+	margin-bottom: 2px;
+	padding: 2px;
 	height: 80px;
-	width: 500px;
+	width: 510px;
 }
 .tab {
 	float: left;
@@ -71,4 +44,22 @@ hr.fancy-line, hr.fancy-line:before {
 h2 {
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+
+.closeline {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+.padleft {
+	margin-left: 8px;
+}
+.listmaker {
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 6px;
+	padding: 6px;
+}
+
+.lm {
+	margin: 6px;
 }

@@ -24,6 +24,11 @@ block content
         h2 Your Messages
         hr
         - each other in others
-          a(class="btn btn-info btn-lg" href="/messages/#{other._id}")
-            = message.title
-            p from #{message.sender}
+          div.row
+            div(style='float:left')
+              p <strong>Title:</strong> #{message.title}
+              p <strong>From:</strong> #{message.sender}
+            div(style='float:right')
+              a(href='/messages/#{message._id}' class='btn btn-success') View
+              a.padleft(htef='/messages/delete/#{message._id}' class='btn btn-danger') Delete
+          hr.closeline

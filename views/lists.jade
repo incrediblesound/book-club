@@ -3,31 +3,35 @@ extends layout
 block content
 
   div.container
-    nav(class="navbar navbar-default" role="navigation")
+    nav(class="navbar navbar-default navbar-fixed-top" role="navigation")
       ul(class="nav navbar-nav")
         li 
           a(href='/main') Home
         li
           a(href='/logout') Log out
-  div.row
-    div.col-md-4
-      span(class="label label-info" style="margin-right:4px;") How many titles in your list?
-      select(name="titles" id="titlesNum")
-        - for(i=1;i<20;i++)
-          option= i
-      br
-      button(id="make" class="btn btn-default") Make List
-      div.spacer
-      form(method="post" action="/savelist")
-        div.form-group
-          label(for="name") List name: 
-            input(type="text" class="form-control" name="name")
-        div.listItems
-        input(type="submit" id="listbtn" class="btn btn-default" value="SAVE")
-    div.col-md-4
-    h1 Your Lists
-    hr
-    - each list in lists
-      h3
-        span(class="label label-info")= list.name         
-        a(href="/lists/#{list._id}")  Take a look
+    div.spacer
+    div.row
+      div.col-md-4
+        h2 New list
+        div.spacer
+        div.listmaker
+          span.lm(class="label label-info" style="margin-right:4px;") How many titles in your list?
+          select.lm(name="titles" id="titlesNum")
+            - for(i=1;i<20;i++)
+              option= i
+          br
+          button.lm(id="make" class="btn btn-default") Make List
+        div.spacer
+        form(method="post" action="/savelist")
+          div.form-group
+            label(for="name") List name: 
+              input(type="text" class="form-control" name="name")
+          div.listItems
+          input(type="submit" id="listbtn" class="btn btn-default" value="SAVE")
+      div.col-md-4
+      h2 Your Lists
+      hr
+      - each list in lists
+        h3
+          span(class="label label-info")= list.name         
+          a(href="/lists/#{list._id}")  Take a look

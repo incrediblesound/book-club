@@ -67,6 +67,13 @@ app.post('/saveinfo', routes.saveinfo);
 app.get('/main', routes.main);
 app.get('/notes', routes.notes);
 app.post('/savenote', routes.savenote);
+app.get('/requests', routes.requests);
+app.get('/following', routes.following);
+app.post('/saverequest', routes.saverequest);
+app.post('/unfollow', routes.unfollow);
+app.get('/reviews/:ID', routes.viewreview);
+app.get('/notes/:ID', routes.viewnote);
+app.get('/lists/:ID', routes.viewlist)
 app.get('/lists', routes.lists);
 app.post('/follow', routes.follow)
 app.post('/savelist', routes.savelist);

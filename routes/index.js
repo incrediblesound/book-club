@@ -10,6 +10,7 @@ var action = mongoose.model('action');
 var list = mongoose.model('list');
 var review = mongoose.model('review');
 var message = mongoose.model('message');
+var quest = mongoose.model('quest');
 
 exports.title = function(req, res) {
 	res.render('title')
@@ -63,38 +64,56 @@ exports.saveinfo = function(req, res) {
   })
 }
 
+exports.following = function(req, res) {
+  member.find({username: {$in: req.user.following}}).exec(function (err, friends) {
+    res.render('following', {
+      friends: friends
+    })
+  })
+}
+
+exports.unfollow = function(req, res) {
+  var usrnm = req.body.username;
+  member.update({username: req.user.username}, {$pull: {following: usrnm}}).exec(function (err, data) {
+    res.redirect('/following');
+  })
+}
+
 exports.main = function(req, res) {
   action.find().sort({DateTime:1}).limit(20).exec(function (err, actions, count) {
-    var notes = [];
-    var lists = [];
-    var reviews = [];
-    var requests = [];
-    var i;
-    console.log(actions)
-    for(i=0;i<actions.length;i++) {
-      if(actions[i].whodunnit !== req.user.username) {
-        if(actions[i].category === 'note' && inArray(actions[i].whodunnit, req.user.following)) {
-          notes.push(actions[i]);
-        } 
-        else if(actions[i].category === 'list' && inArray(actions[i].whodunnit, req.user.following)) {
-          lists.push(actions[i]);
-        }
-        else if(actions[i].category === 'review' && inArray(actions[i].author, req.user.authors) || inArray(actions[i].genre, req.user.genres) || inArray(actions[i].whodunnit, req.user.following)) {
-          reviews.push(actions[i]);
-        } 
-        else if(actions[i].category === 'request' && inArray(actions[i].whodunnit, req.user.following)) {
-          requests.push(actions[i]);
+    message.find({recipient: req.user.username}).exec(function (err, messages) {
+      console.log(messages);
+      var notes = [];
+      var lists = [];
+      var reviews = [];
+      var requests = [];
+      var i;
+      for(i=0;i<actions.length;i++) {
+        if(actions[i].whodunnit !== req.user.username) {
+          if(actions[i].category === 'note' && inArray(actions[i].whodunnit, req.user.following)) {
+            notes.push(actions[i]);
+          }
+          else if(actions[i].category === 'list' && inArray(actions[i].whodunnit, req.user.following)) {
+            lists.push(actions[i]);
+          }
+          else if(actions[i].category === 'review' && inArray(actions[i].author, req.user.authors) || actions[i].category === 'review' && inArray(actions[i].genre, req.user.genres) || actions[i].category === 'review' && inArray(actions[i].whodunnit, req.user.following)) {
+            reviews.push(actions[i]);
+          } 
+          else if(actions[i].category === 'request' && inArray(actions[i].whodunnit, req.user.following)) {
+            requests.push(actions[i]);
+          }
         }
       }
-    }
-    res.render('main', {
-    user: req.user,
-    notes: notes,
-    lists: lists,
-    reviews: reviews,
-    requests: requests
-    });
-  }) 
+      res.render('main', {
+      user: req.user,
+      notes: notes,
+      lists: lists,
+      reviews: reviews,
+      requests: requests,
+      messages: messages
+      });
+    })
+  })
 }
 
 exports.follow = function(req, res) {
@@ -137,13 +156,41 @@ exports.savenote = function(req, res) {
   })
 }
 
+exports.requests = function(req, res) {
+  quest.find({madeby: req.user.username}).exec(function (err, quests) {
+    res.render('request', {
+      requests: quests
+    })
+  })
+}
+
+exports.saverequest = function(req, res) {
+  new quest({
+    madeby: req.user.username,
+    name: req.body.name,
+    content: req.body.content,
+    tags: req.body.tags.split(", "),
+    madeon: Date.now()
+  }).save(function (err, thisquest) {
+    new action({
+      DateTime: Date.now(),
+      whodunnit: req.user.username,
+      category: "request",
+      actionRef: thisquest._id,
+      description: req.user.name + " made a request called " + thisquest.name
+    }).save(function (err, thisaction) {
+      res.redirect('/requests');
+    })
+  })
+}
+
 exports.profile = function(req, res) {
   var key = req.params.username
   member.findOne({ username: key }).exec(function (err, Member) {
     note.find({ noteby: key }).exec(function (err, notes) {
       list.find({ listby: key }).exec(function (err, lists) {
         review.find({ reviewby: key }).exec(function (err, reviews) {
-          console.log(Member);
+          console.log(reviews);
           res.render('profile', {
             Member: Member,
             notes: notes,
@@ -250,6 +297,30 @@ exports.messages = function (req, res) {
   })
 }
 
+exports.viewreview = function (req, res) {
+  review.findOne({_id: req.params.ID}).exec(function (err, review) {
+    res.render('viewreview', {
+      review: review
+    })
+  })
+}
+
+exports.viewnote = function (req, res) {
+  note.findOne({_id: req.params.ID}).exec(function (err, note) {
+    res.render('viewnote', {
+      note: note
+    })
+  })
+}
+
+exports.viewlist = function (req, res) {
+  list.findOne({_id: req.params.ID}).exec(function (err, list) {
+    res.render('viewlist', {
+      list: list
+    })
+  })
+}
+
 exports.sendMessage = function (req, res) {
   new message({
     title: req.body.title,
@@ -277,9 +348,9 @@ listObject = function(title,author,description){
     listItem = {
     title: title[i],
     author: author[i],
-    Description: description[i]
+    description: description[i]
     }
-  list.push(listItem);
+  List.push(listItem);
   };
   return List;
 }

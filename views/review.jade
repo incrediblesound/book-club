@@ -20,7 +20,7 @@ block content
             label(for="author") Author:
             input(type="text" class="form-control" name="author" required)
           div.form-group
-            label(for="content")
+            label(for="content") Review content:
             textarea(class="form-control" name="content")
           div.form-group
             label(for="genre") Most relevant genre:
@@ -33,5 +33,4 @@ block content
         h1 Your reviews
         hr
         - each review in reviews
-          h2
-            span(class="label label-default")= review.title
+          a(class="btn btn-primary" href="/reviews/#{review._id}")= review.title

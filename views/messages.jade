@@ -3,19 +3,24 @@ extends layout
 block content
 
   div.container
-    nav(class="navbar navbar-default" role="navigation")
+    nav(class="navbar navbar-default navbar-fixed-top" role="navigation")
       ul(class="nav navbar-nav")
-        li.active 
-          a Home
+        li
+          a(href='/main') Home
         li
           a(href='/logout') Log out
     div.col-md-6
       h1 Your Messages:
       hr
       - each message in mssgs
-        a(href="/messages/#{message._id}" class='btn btn-default')= message.title
-          p from: #{message.sender}
-         View
+        div.row
+          div(style='float:left')
+            p <strong>Title:</strong> #{message.title}
+            p <strong>From:</strong> #{message.sender}
+          div(style='float:right')
+            a(href='/messages/#{message._id}' class='btn btn-success') View
+            a.padleft(htef='/messages/delete/#{message._id}' class='btn btn-danger') Delete
+        hr.closeline
     div.col-md-6
       h1 Your Friends:
       form(method="post" action="/compose")

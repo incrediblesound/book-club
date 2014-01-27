@@ -1,0 +1,31 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default navbar-fixed-top" role="navigation")
+      ul(class="nav navbar-nav")
+        li
+          a(href='/main') Home
+        li
+          a(href='/logout') Log out
+    div.row
+      div.col-md-6
+        h1= note.name
+        h3 By #{note.noteby}
+        hr
+        p= note.content
+        hr
+      div.col-md-6
+        div.spacer
+        div.row
+          div
+            p(class='lead pull-left') Note by user #{note.noteby}
+            a(href='/profile/#{note.noteby}' class='btn btn-default pull-right') View profile
+        hr.closeline
+        div.spacer
+        - if(note.tags.length > 0)
+          p.lead Tags:
+          ul
+            - each tag in note.tags
+              li= tag
