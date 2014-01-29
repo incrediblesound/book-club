@@ -14,10 +14,10 @@ block content
         h1= list.name
         h3 By #{list.listby}
         hr
-        - each item in list.items
-          p.lead= item.title
-          p by #{item.author}
-          p <i> #{item.description} </i>
+        - for(i=0;i<list.items.length;i++)
+          p.lead <strong>#{i+1})</strong> #{list.items[i].title}
+          p by #{list.items[i].author}
+          p <i> #{list.items[i].description} </i>
           hr.closeline
       div.col-md-6
         div.spacer

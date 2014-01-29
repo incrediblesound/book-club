@@ -18,14 +18,14 @@ block content
             p <strong>Title:</strong> #{message.title}
             p <strong>From:</strong> #{message.sender}
           div(style='float:right')
-            a(href='/messages/#{message._id}' class='btn btn-success') View
-            a.padleft(htef='/messages/delete/#{message._id}' class='btn btn-danger') Delete
+            a(href='/messages/delete/#{message._id}' class='btn btn-danger') Delete
+            a.padleft(htef='/messages/#{message._id}' class='btn btn-success') View
         hr.closeline
     div.col-md-6
-      h1 Your Friends:
-      form(method="post" action="/compose")
-        - each friend in fllwng
-          p= friend.name
-          input(type="checkbox" name="sendto" value="#{friend.username}")
-          br
-        input(type="submit" class="btn btn-default" value="send")
+      h1 Send a new message:
+      div(style='margin-left:16px;')
+        form(method="post" action="/compose")
+          - each friend in fllwng
+            p= friend.name
+              input(type="checkbox" name="sendto" value="#{friend.username}")
+        input(type="submit" class="btn btn-default" value="Compose")

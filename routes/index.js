@@ -80,37 +80,34 @@ exports.unfollow = function(req, res) {
 }
 
 exports.main = function(req, res) {
-  action.find().sort({DateTime:1}).limit(20).exec(function (err, actions, count) {
-    message.find({recipient: req.user.username}).exec(function (err, messages) {
-      console.log(messages);
-      var notes = [];
-      var lists = [];
-      var reviews = [];
-      var requests = [];
+  action.find().sort({DateTime:-1}).limit(20).exec(function (err, actions, count) {
+    message.find().exec(function (err, messages) {
+      var count = messageCount(req.user.username,messages);
+      var actionList = [];
       var i;
       for(i=0;i<actions.length;i++) {
         if(actions[i].whodunnit !== req.user.username) {
           if(actions[i].category === 'note' && inArray(actions[i].whodunnit, req.user.following)) {
-            notes.push(actions[i]);
+            actionList.push(actions[i]);
           }
           else if(actions[i].category === 'list' && inArray(actions[i].whodunnit, req.user.following)) {
-            lists.push(actions[i]);
+            actionList.push(actions[i]);
           }
           else if(actions[i].category === 'review' && inArray(actions[i].author, req.user.authors) || actions[i].category === 'review' && inArray(actions[i].genre, req.user.genres) || actions[i].category === 'review' && inArray(actions[i].whodunnit, req.user.following)) {
-            reviews.push(actions[i]);
+            actionList.push(actions[i]);
           } 
           else if(actions[i].category === 'request' && inArray(actions[i].whodunnit, req.user.following)) {
-            requests.push(actions[i]);
+            actionList.push(actions[i]);
+          }
+          else if(actions[i].category === 'follow' && actions[i].actionRef === req.user.username) {
+            actionList.push(actions[i]);
           }
         }
       }
       res.render('main', {
       user: req.user,
-      notes: notes,
-      lists: lists,
-      reviews: reviews,
-      requests: requests,
-      messages: messages
+      actionList: actionList,
+      messages: count
       });
     })
   })
@@ -118,11 +115,20 @@ exports.main = function(req, res) {
 
 exports.follow = function(req, res) {
   var Member = req.body.member
-  console.log(Member);
   if(req.user.username !== Member) {
     member.update({username: req.user.username}, {$push: {following: Member}}).exec(function (err, data) {
-      res.redirect('/profile/'+ Member)
+      new action({
+        DateTime: Date.now(),
+        whodunnit: req.user.username,
+        category: "follow",
+        actionRef: req.body.member,
+        description: req.user.username + " is now following you!"
+      }).save(function (err, action) {
+        res.redirect('/profile/'+ Member)
+      })
     })    
+  } else {
+    res.redirect('/profile/' + Member)
   }
 }
 
@@ -142,7 +148,8 @@ exports.savenote = function(req, res) {
   new note({
     name: title,
     noteby: req.user.username,
-    content: body
+    content: body,
+    datetime: Date.now()
   }).save(function (err, thisnote) {
     new action({
       DateTime: Date.now(),
@@ -170,7 +177,7 @@ exports.saverequest = function(req, res) {
     name: req.body.name,
     content: req.body.content,
     tags: req.body.tags.split(", "),
-    madeon: Date.now()
+    datetime: Date.now()
   }).save(function (err, thisquest) {
     new action({
       DateTime: Date.now(),
@@ -218,7 +225,8 @@ exports.savelist = function(req, res) {
   new list({
     name: req.body.name,
     listby: req.user.username,
-    items: listObject(title,author,description)
+    items: listObject(title,author,description),
+    datetime: Date.now()
     }).save(function (err, thislist) {
       new action({
       DateTime: Date.now(),
@@ -235,7 +243,8 @@ exports.savelist = function(req, res) {
 exports.review = function(req, res) {
   review.find({reviewby: req.user.username}).exec(function (err, reviews) {
     res.render('review', {
-      reviews: reviews
+      reviews: reviews,
+      genres: genresArray
     })
   })
 }
@@ -252,7 +261,8 @@ exports.savereview = function(req, res) {
     review: content,
     reviewby: req.user.username,
     genre: genre,
-    tags: tags
+    tags: tags,
+    datetime: Date.now()
   }).save(function (err, thisreview) {
     new action({
       DateTime: Date.now(),
@@ -287,12 +297,23 @@ exports.viewMessage = function (req, res) {
 }
 
 exports.messages = function (req, res) {
-  message.find({recipient: req.user.username}).exec(function (err, mssgs) {
+  message.find().exec(function (err, mssgs) {
+    var toMe = recipientList(req.user.username, mssgs);
     member.find({username: {$in: req.user.following}}).exec(function (err, fllwng) {
       res.render('messages', {
-        mssgs: mssgs,
+        mssgs: toMe,
+        user: req.user,
         fllwng: fllwng
       })
+    })
+  })
+};
+
+exports.deleteMessage = function (req, res) {
+  var username = req.user.username
+  message.update({_id: req.params.ID}, {$pull: {recipient: username}}, function (err, data) {
+    message.remove({recipient: []}, function (err,data) {
+      res.redirect('/messages');
     })
   })
 }
@@ -303,7 +324,7 @@ exports.viewreview = function (req, res) {
       review: review
     })
   })
-}
+};
 
 exports.viewnote = function (req, res) {
   note.findOne({_id: req.params.ID}).exec(function (err, note) {
@@ -311,7 +332,7 @@ exports.viewnote = function (req, res) {
       note: note
     })
   })
-}
+};
 
 exports.viewlist = function (req, res) {
   list.findOne({_id: req.params.ID}).exec(function (err, list) {
@@ -321,11 +342,20 @@ exports.viewlist = function (req, res) {
   })
 }
 
+exports.viewrequest = function (req, res) {
+  quest.findOne({_id: req.params.ID}).exec(function (err, quest) {
+    res.render('viewrequest', {
+      quest: quest
+    })
+  })
+}
+
 exports.sendMessage = function (req, res) {
+  var to = req.body.sendto.split(",");
   new message({
     title: req.body.title,
     sender: req.user.username,
-    recipient: req.body.sendto,
+    recipient: to,
     content: req.body.content,
     senton: Date.now()
   }).save(function (err, mess) {
@@ -337,6 +367,107 @@ exports.compose = function (req, res) {
   res.render('compose', {
     to: req.body.sendto
   })
+}
+
+exports.search = function (req, res) {
+  var listResults = [];
+  var reviewResults = [];
+  var questResults = [];
+  list.find( function (err, lists) {
+    review.find( function (err, reviews) {
+      quest.find( function (err, quests) {
+        var Q = req.body.query.split(" ");
+        var l;
+        var i;
+        for(l=0;l<Q.length;l++) {
+          for(i=0;i<lists.length;i++) {
+            if( match(Q[l], lists[i].name) && !(inArray(lists[i],listResults)) ) {
+              listResults.push(lists[i]);
+            }
+          }
+        }
+        for(l=0;l<Q.length;l++) {
+          for(i=0;i<reviews.length;i++) {
+            if( match(Q[l], reviews[i].genre) || match(Q[l], reviews[i].tags)) {
+              if(!inArray(reviews[i], reviewResults)) {
+                reviewResults.push(reviews[i]);
+              }
+            }
+          }
+        }
+        for(l=0;l<Q.length;l++) {
+          for(i=0;i<quests.length;i++) {
+            if( match(Q[l], quests[i].tags) && !(inArray(quests[i], questResults)) || match(Q[l], quests[i].name) && !(inArray(quests[i], questResults))) {
+              questResults.push(quests[i]);
+            }
+          }
+        }
+        res.render('results', {
+          lists: listResults,
+          reviews: reviewResults,
+          quests: questResults
+        })
+      })
+    })
+  })
+}
+//these are just helper functions you nosy bastard
+
+var recipientList = function (username, messages) {
+  var i;
+  var l;
+  var r = []
+  for(i=0; i<messages.length;i++) {
+    var to = messages[i].recipient;
+    for(l=0; l<to.length;l++) {
+      if(username === to[l]) {
+        r.push(messages[i]);
+        break;
+      }
+    }
+  }
+  return r;
+}
+
+var messageCount = function (username, messages) {
+  var i;
+  var l;
+  var count = 0
+  for(i=0; i<messages.length;i++) {
+    var recip = messages[i].recipient;
+    for(l=0; l<recip.length;l++) {
+      if(username === recip[l]) {
+        count += 1;
+        break;
+      }
+    }
+  }
+  return count;
+}
+
+var inArray = function(object, array) {
+  var iA;
+  for(iA = 0; iA<array.length; iA++) {
+    if(object === array[iA]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+var match = function (string, field) {
+  var i;
+  if(typeof field !== 'object') {
+    var array = field.split(" ");
+  } else {
+    var array = field
+  }
+  for(i=0;i<array.length;i++) {
+    if(string.toLowerCase() === array[i].toLowerCase()) {
+      return true;
+    }
+  }
+  return false;
 }
 
 listObject = function(title,author,description){
@@ -362,3 +493,27 @@ var inArray = function(item, array) {
     }
   };
 }
+
+var genresArray = [
+"science fiction",
+"history",
+"romance",
+"horror",
+"travel",
+"science",
+"classics",
+"philosophy",
+"historical fiction",
+"fiction",
+"fantasy",
+"mystery",
+"short story",
+"biography",
+"autobiography",
+"how to",
+"essay",
+"textbook",
+"childrens literature",
+"non fiction",
+"blog"
+]

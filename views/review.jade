@@ -24,7 +24,9 @@ block content
             textarea(class="form-control" name="content")
           div.form-group
             label(for="genre") Most relevant genre:
-            input(type="text" class="form-control" name="genre" required)
+            select.lm(name="genre")
+              - each genre in genres
+                option= genre
           div.form-group
             label(for="tags") Tags and sub-genres:
             input(type="text" class="form-control" name="tags")

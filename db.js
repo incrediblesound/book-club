@@ -21,7 +21,8 @@ var BookReview = new Schema({
 	review: String,
 	reviewby: String,
 	genre: String,
-	tags: Array
+	tags: Array,
+	datetime: Date
 });
 
 var review = mongoose.model('review', BookReview);
@@ -29,7 +30,8 @@ var review = mongoose.model('review', BookReview);
 var BookList = new Schema({
 	name: String,
 	items: Array,
-	listby: String
+	listby: String,
+	datetime: Date
 })
 
 var list = mongoose.model('list', BookList);
@@ -38,7 +40,8 @@ var Note = new Schema({
 	name: String,
 	noteby: String,
 	content: String,
-	tags: Array
+	tags: Array,
+	datetime: Date
 })
 
 var note = mongoose.model('note', Note);
@@ -56,18 +59,18 @@ var Action = new Schema({
 
 var action = mongoose.model('action', Action);
 
-var newsItem = new Schema({
-	userID: String,
-	actionID: String,
-	Relevancy: Date
-})
+//var newsItem = new Schema({
+//	userID: String,
+//	actionID: String,
+//	Relevancy: Date
+//})
 
-var newsItem = mongoose.model('newsItem', newsItem);
+//var newsItem = mongoose.model('newsItem', newsItem);
 
 var Message = new Schema({
 	title: String,
 	sender: String,
-	recipient: String,
+	recipient: Array,
 	content: String,
 	senton: Date
 })
@@ -77,7 +80,7 @@ var Quest = new Schema({
 	name: String,
 	content: String,
 	tags: Array,
-	madeon: Date
+	datetime: Date
 })
 
 var quest = mongoose.model('quest', Quest);

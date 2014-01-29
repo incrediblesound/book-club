@@ -11,9 +11,9 @@ block content
           a(href='/logout') Log out
         li
           a(href='/following') Friends
-        form(class="navbar-form navbar-left" role="search")
+        form(class="navbar-form navbar-left" method="post" action='/search' role="search")
           div(class="form-group")    
-            input(type="text" class="form-control" placeholder="Search")
+            input(type="text" class="form-control" name = 'query' placeholder="Search")
           button(type="submit" class="btn btn-default") Search
     div.row
     div.col-md-8      
@@ -22,42 +22,51 @@ block content
         a(class="btn btn-default btn-lg" href='/profile/#{user.username}' style="float:right;") Profile
       hr
       div.newfeed
-        - each review in reviews
-          div.news
-            h2
-              span(class="label label-primary tab") R
-            p= review.description
-            p On 
-              = review.DateTime
-              a(href='reviews/#{review.actionRef}')  Check it out!
-            hr
-        - each list in lists
-          div.news
-            h2
-              span(class="label label-success tab") L 
-            p= list.description
-            p On 
-              = list.DateTime
-              a(href='lists/#{list.actionRef}')  Check it out!
-            hr
-        - each request in requests
-          div.news
-            h2
-              span(class="label label-danger tab") Rq 
-            p= request.description
-            p On 
-              = request.DateTime
-              a(href='lists/#{request.actionRef}')  Check it out!
-            hr
-        - each note in notes
-          div.news
-            h2
-              span(class="label label-info tab") N
-            p= note.description
-            p On 
-              = note.DateTime
-              a(href='notes/#{note.actionRef}') Check it out!
-            hr
+        - each action in actionList
+          - if(action.category === 'review')
+            div.news
+              h2
+                span(class="label label-primary tab") R
+              p= action.description
+              p On 
+                = action.DateTime
+                a(href='reviews/#{action.actionRef}')  Check it out
+              hr
+          - if(action.category === 'list')
+            div.news
+              h2
+                span(class="label label-warning tab") L 
+              p= action.description
+              p On 
+                = action.DateTime
+                a(href='lists/#{action.actionRef}')  Take a look
+              hr
+          - if(action.category === 'request')
+            div.news
+              h2
+                span(class="label label-danger tab") Rq 
+              p= action.description
+              p On 
+                = action.DateTime
+                a(href='requests/#{action.actionRef}')  Lend a hand
+              hr
+          - if(action.category === 'note')
+            div.news
+              h2
+                span(class="label label-info tab") N
+              p= action.description
+              p On 
+                = action.DateTime
+                a(href='notes/#{action.actionRef}')  See whats up
+              hr
+          - if(action.category === 'follow')
+            div.news
+              h2
+                span(class='label label-success tab') F
+              p= action.description
+              p On
+                = action.DateTime
+                a(href='profile/#{action.whodunnit}')  Follow them back
     div.col-md-4
       div.spacer
       div.main-nav
@@ -70,7 +79,7 @@ block content
 
           h1
             a(class="btn btn-default btn-lg" href='/messages') Messages
-            - if(messages.length > 0)
-              span(class="badge" style="margin-left:8px;")= messages.length
+            - if(messages > 0)
+              span(class="badge" style="margin-left:8px;")= messages
           h1
             a(class="btn btn-default btn-lg" href='/requests') Requests
