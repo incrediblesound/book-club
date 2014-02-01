@@ -39,13 +39,13 @@ passport.use(new LocalStrategy(
 	function(username,password,done) {
 		member.findOne({ username: username }, function(err,user){
 			if(err) { return done(err); }
-			if(!user) {
-				return done(null, false, { message: 'incorrect username' });
-			}
-			if(password !== user.password) {
-				return done(null, false, { message: 'incorrect password' });
-			}
-			return done(null, user);
+			if(!user) { return done(null, false, { message: 'incorrect username' }); }
+      
+			user.comparePassword( password, function (err, ismatch) {
+				if(err) { return done(err); }
+        if(!ismatch) { return done(null, false, { message: 'incorrect password' }); }
+        if(ismatch) { return done(null, user); }
+			}) 
 		});
 	}
 ));
@@ -70,6 +70,7 @@ app.post('/savenote', routes.savenote);
 app.get('/requests', routes.requests);
 app.get('/following', routes.following);
 app.post('/saverequest', routes.saverequest);
+app.post('/newlist', routes.newlist);
 app.post('/unfollow', routes.unfollow);
 app.get('/reviews/:ID', routes.viewreview);
 app.get('/notes/:ID', routes.viewnote);

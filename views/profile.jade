@@ -9,33 +9,59 @@ block content
           a(href='/main') Home
         li
           a(href='/logout') Log out
-    div.row
-      form(method='post' action='/follow' class='pull-right')
-        input(type='hidden' value='#{Member.username}' name='member')
-        input(type='submit' class="btn btn-success lm" value='follow')
-      h1(style="text-align:center;")= Member.name
-        's profile
-      hr
-      h2 About me:
-      p= Member.Bio
-      hr
+    h1(style="text-align:center;")= Member.name
+      's profile
+    hr
+    div.spacer
     div.row
       div.col-md-4
+        h2 About me:
+        p= Member.bio
+        - if(Member.username !== user.username)
+          form(method='post' action='/follow')
+            input(type='hidden' value='#{Member.username}' name='member')
+            input(type='submit' class="btn btn-success lm" value='follow')
+      div.col-md-4
         h2 
-          span(class="label label-default") Lists
-          hr
+          span(class="label label-warning") L
+        div.spacer
+        p.lead Lists
+        hr
+        ul
           - each list in lists
-            a(href="/lists/#{list._id}")= list.name
-      div.col-md-4
-        h2
-          span(class="label label-default") Notes
-          hr
-          - each note in notes
-            a(href="/notes/#{note._id}")= note.name
+            li.lm
+              span(class="label label-warning") L
+              a(href="/lists/#{list._id}")= list.name
+        h2 
+          span(class="label label-success") R
+        div.spacer
+        p.lead Reviews
+        hr
+        ul
+          - each review in reviews
+            li.lm
+              span(class="label label-success") R
+              a(href="/reviews/#{review._id}")= review.title
       div.col-md-4
         h2 
-          span(class="label label-default") Reviews
-          hr
-          - each review in reviews
-            a(href="/reviews/#{review._id}")= review.title
+          span(class="label label-info") N
+        div.spacer
+        p.lead Notes
+        hr
+        ul
+          - each note in notes
+            li.lm
+              span(class="label label-info") N
+              a(href="/notes/#{note._id}")= note.name
+        h2 
+          span(class="label label-danger") Rq
+        div.spacer
+        p.lead Requests
+        hr
+        ul
+          - each quest in quests
+            li.lm
+              span(class="label label-danger") Rq
+              a(href="/requests/#{quest._id}")= quest.name
+
         

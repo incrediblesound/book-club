@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
-
 var Schema = mongoose.Schema;
+var bcrypt = require('bcrypt');
+var SALT_WORK_FACTOR = 10;
 
 var Member = new Schema({
 	name: String,
-	username: { type: String, index: {unique: true} },
-	password: String,
+	username: { type: String, required: true, index: {unique: true} },
+	password: {type: String, required: true},
+	email: String,
 	joined: Date,
 	bio: String,
 	genres: Array,
@@ -13,11 +15,37 @@ var Member = new Schema({
 	following: Array
 });
 
+Member.pre('save', function(next) {
+	var mem = this;
+	if(!mem.isModified('password')) return next();
+
+	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    if (err) return next(err);
+
+    bcrypt.hash(mem.password, salt, function(err, hash) {
+      if (err) return next(err);
+
+      mem.password = hash;
+      next();
+    });
+  });
+});
+
+Member.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
+
 var member = mongoose.model('member', Member);
+
+
 
 var BookReview = new Schema({
 	title: String,
 	author: String,
+	url: String,
 	review: String,
 	reviewby: String,
 	genre: String,

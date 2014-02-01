@@ -29,10 +29,12 @@ exports.register = function(req, res) {
 	var name = req.body.name;
 	var username = req.body.username;
   var password = req.body.password;
+  var email = req.body.email;
 	new member({
 		name: name,
 		username: username,
 		password: password,
+    email: email,
 		joined: Date.now()
 	}).save(function (err, user) {
 		if(err) {
@@ -54,10 +56,12 @@ exports.memberinfo = function(req, res) {
 }
 
 exports.saveinfo = function(req, res) {
-  var genres = req.body.genres
-  var authors = req.body.authors.split(", ")
+  var genres = req.body.genres;
+  var authors = req.body.authors.split(", ");
+  var bio = req.body.bio;
   member.update({username: req.user.username}, {
     genres: genres,
+    bio: bio,
     authors: authors
   }).exec(function (err, member) {
     res.redirect('/main')
@@ -80,6 +84,9 @@ exports.unfollow = function(req, res) {
 }
 
 exports.main = function(req, res) {
+if(!req.user) {
+  res.redirect('/');
+} else {
   action.find().sort({DateTime:-1}).limit(20).exec(function (err, actions, count) {
     message.find().exec(function (err, messages) {
       var count = messageCount(req.user.username,messages);
@@ -112,10 +119,11 @@ exports.main = function(req, res) {
     })
   })
 }
+}
 
 exports.follow = function(req, res) {
   var Member = req.body.member
-  if(req.user.username !== Member) {
+  if(req.user.username !== Member && !inArray(Member, req.user.following)) {
     member.update({username: req.user.username}, {$push: {following: Member}}).exec(function (err, data) {
       new action({
         DateTime: Date.now(),
@@ -134,7 +142,6 @@ exports.follow = function(req, res) {
 
 exports.notes = function(req, res) {
   note.find({noteby: req.user.username}).exec(function (err, notes) {
-    console.log(notes);
     res.render('notes', {
     user: req.user,
     notes: notes
@@ -192,22 +199,29 @@ exports.saverequest = function(req, res) {
 }
 
 exports.profile = function(req, res) {
+  if(!req.user) {
+    res.redirect('/');
+  } else {
   var key = req.params.username
   member.findOne({ username: key }).exec(function (err, Member) {
     note.find({ noteby: key }).exec(function (err, notes) {
       list.find({ listby: key }).exec(function (err, lists) {
         review.find({ reviewby: key }).exec(function (err, reviews) {
-          console.log(reviews);
+          quest.find({ madeby: key }).exec(function (err, quests) {
           res.render('profile', {
             Member: Member,
+            user: req.user,
             notes: notes,
             lists: lists,
-            reviews: reviews
+            reviews: reviews,
+            quests: quests
           })
+        })
         })
       })
     })
   })
+}
 }
 
 exports.lists = function(req, res) {
@@ -218,14 +232,22 @@ exports.lists = function(req, res) {
   })
 }
 
+exports.newlist = function(req, res) {
+  var num = req.body.num;
+  res.render('newlist', {
+    num: num
+  })
+}
+
 exports.savelist = function(req, res) {
   var title = req.body.title;
   var author = req.body.author;
   var description = req.body.description;
+  var url = req.body.url;
   new list({
     name: req.body.name,
     listby: req.user.username,
-    items: listObject(title,author,description),
+    items: listObject(title,author,url,description),
     datetime: Date.now()
     }).save(function (err, thislist) {
       new action({
@@ -254,10 +276,12 @@ exports.savereview = function(req, res) {
   var author = req.body.author;
   var content = req.body.content;
   var genre = req.body.genre;
-  var tags = (req.body.tags.split(", ") || null )
+  var tags = req.body.tags.split(", ");
+  var url = req.body.url;
   new review({
     title: title,
     author: author,
+    url: url,
     review: content,
     reviewby: req.user.username,
     genre: genre,
@@ -281,14 +305,12 @@ exports.viewMessage = function (req, res) {
   message.find({recipient: req.user.username}).exec(function (err, messages) {
     var inside = function(messages) {
       for(i=0;i<messages.length;i++) {
-        console.log(messages[i]._id)
         if(messages[i]._id == req.params.ID) {
           return messages[i];
         }
       }
     }
     var focus = inside(messages);
-    console.log(focus);
     res.render('messageview', {
       message: focus,
       others: messages
@@ -321,7 +343,8 @@ exports.deleteMessage = function (req, res) {
 exports.viewreview = function (req, res) {
   review.findOne({_id: req.params.ID}).exec(function (err, review) {
     res.render('viewreview', {
-      review: review
+      review: review,
+      user: req.user
     })
   })
 };
@@ -344,8 +367,10 @@ exports.viewlist = function (req, res) {
 
 exports.viewrequest = function (req, res) {
   quest.findOne({_id: req.params.ID}).exec(function (err, quest) {
+    var friend = inArray(quest.madeby, req.user.following);
     res.render('viewrequest', {
-      quest: quest
+      quest: quest,
+      friend: friend
     })
   })
 }
@@ -470,7 +495,7 @@ var match = function (string, field) {
   return false;
 }
 
-listObject = function(title,author,description){
+listObject = function(title,author,url,description){
 
   List = [];
 
@@ -479,6 +504,7 @@ listObject = function(title,author,description){
     listItem = {
     title: title[i],
     author: author[i],
+    url: url[i],
     description: description[i]
     }
   List.push(listItem);

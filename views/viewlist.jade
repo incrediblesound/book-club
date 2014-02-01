@@ -16,8 +16,10 @@ block content
         hr
         - for(i=0;i<list.items.length;i++)
           p.lead <strong>#{i+1})</strong> #{list.items[i].title}
-          p by #{list.items[i].author}
+          p By #{list.items[i].author}
           p <i> #{list.items[i].description} </i>
+          - if(list.items[i].url.length > 0)
+            span(class='label label-default') <strong>URL:</strong> #{list.items[i].url}
           hr.closeline
       div.col-md-6
         div.spacer

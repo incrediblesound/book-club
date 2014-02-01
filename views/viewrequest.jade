@@ -16,6 +16,10 @@ block content
         hr
         p= quest.content
         hr
+        - if(friend)
+          form(method='post' action='/compose')
+            input(type='hidden' name='sendto' value='#{quest.madeby}')
+            input(type='submit' value='respond to this request')
       div.col-md-6
         div.spacer
         div.row

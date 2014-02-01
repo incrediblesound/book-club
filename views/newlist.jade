@@ -1,0 +1,35 @@
+extends layout
+
+block content
+
+  div.container
+    nav(class="navbar navbar-default navbar-fixed-top" role="navigation")
+      ul(class="nav navbar-nav")
+        li 
+          a(href='/main') Home
+        li
+          a(href='/logout') Log out
+    div.row
+      div.spacer
+      div.col-md-6
+        form(method="post" action="/savelist")
+          div.form-group
+            h3
+              label(for="name" class='label label-warning') List name: 
+            input(type="text" class="form-control" name="name" required)
+          - for(var i = 0; i < num; ++i)
+            div.listitems
+              div.form-group
+                span.badge(style="margin-right:6px;") #{i+1}
+                label(for="title") Title:
+                input.form-control(name="title")
+              div.form-group
+                label(for="author") Author:
+                input.form-control(name="author")
+              div.form-group
+                label(for="url") URL:
+                input.form-control(name='url')
+              div.form-group
+                label(for="description") Description:
+                input(class="form-control" name="description")
+          input(type="submit" id="listbtn" class="btn btn-default" value="SAVE")

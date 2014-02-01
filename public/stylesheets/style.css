@@ -63,3 +63,11 @@ h2 {
 .lm {
 	margin: 6px;
 }
+
+.listitems {
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 6px;
+	padding: 6px;
+	margin-bottom: 8px;
+}
