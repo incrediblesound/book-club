@@ -8,90 +8,11 @@ block content
         div.col-md-6
           h1 Choose the genres you are interested in:
           hr
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="science fiction") 
-              span Science Fiction
-          div.checkbox
-            label
-                input(type="checkbox" name="genres" value="history") 
-                span History
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="romance") 
-              span Romance
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="horror") 
-              span Horror
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="travel") 
-              span Travel
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="science") 
-              span Science
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="classics") 
-              span Classics
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="philosophy") 
-              span Philosophy
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="historical fiction") 
-              span Historical Fiction
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="fiction") 
-              span Fiction
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="fantasy") 
-              span Fantasy
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="mystery") 
-              span Mystery
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="short story") 
-              span Short Story
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="biography") 
-              span Biography
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="autobiography") 
-              span Autobiography
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="how to") 
-              span How To
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="essay") 
-              span Essay
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="textbook") 
-              span Textbook
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="childrens literature") 
-              span Childrens Literature
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="non fiction") 
-              span Non Fiction
-          div.checkbox
-            label
-              input(type="checkbox" name="genres" value="blog") 
-              span Blog
+          - each genre in genres
+            div.checkbox
+              label
+                input(type="checkbox" name="genres" value="#{genre}") 
+                span= genre
         div.col-md-6
           h1 Write the full name of your favorite authors:
           hr

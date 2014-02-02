@@ -52,7 +52,9 @@ exports.register = function(req, res) {
 }
 
 exports.memberinfo = function(req, res) {
-  res.render('memberinfo');
+  res.render('memberinfo', {
+    genres: genresArray
+  });
 }
 
 exports.saveinfo = function(req, res) {
@@ -541,5 +543,6 @@ var genresArray = [
 "textbook",
 "childrens literature",
 "non fiction",
+"technology",
 "blog"
 ]

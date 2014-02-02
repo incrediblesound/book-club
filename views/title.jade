@@ -5,19 +5,37 @@ block content
   div.container
     div.row
       div.col-md-6
-        h1.text-center Book Club
+        h1(class="text-center")<strong>Book Club</strong>
         div.spacer
-        img(src="./image/titleimage.jpeg" height="320" width="540")
+        img.center-block(src="./image/book.jpeg" height="160" width="270")
         h3.text-center Simple, straight forward networking <br> for book lovers.
+        hr
+        h2
+          span(class="label label-primary tab") R
+        p Members can write book and blog reviews to help other members find material worth reading
+        h2
+          span(class="label label-warning tab") L
+        p Lists can be made to put a collection of good reads in one place, <br> for example "best tech blogs" or "this years best fiction"
+        h2
+          span(class="label label-danger tab") Rq
+        p Members can make requests to solicit advice from other members
+        br
+        h2
+          span(class="label label-info tab") N
+        p Notes are open ended, any kind of public message can be put in a note
+        br
+        h2
+          span(class='label label-success tab') F
+        p Follow other members to recieve updates on their activity
       div.col-md-6
         h1 Sign up to share your passion!
         div.spacer
         form(method='post' action='/register')
           div.form-group
-            label(for="name") Your Name:
+            label(for="name") Name:
             input(type="text" class="form-control" id="name" name="name" required)
           div.form-group
-            label(for="username") Your Username:
+            label(for="username") Username:
             input(type="text" class='form-control' id="username" name="username" required)
           div.form-group
             label(for='email') Email:

@@ -21,47 +21,57 @@ block content
           form(method='post' action='/follow')
             input(type='hidden' value='#{Member.username}' name='member')
             input(type='submit' class="btn btn-success lm" value='follow')
+        - if(Member.genres.length > 0)
+          h2 Interests:
+          ul
+            - each genre in Member.genres
+              li= genre
+        - if(!(Member.authors.length === 1 && Member.authors[0] === ""))
+          h2 Favorite authors:
+          ul
+            - each author in Member.authors
+              li= author
       div.col-md-4
         h2 
           span(class="label label-warning") L
         div.spacer
         p.lead Lists
-        hr
         ul
           - each list in lists
             li.lm
               span(class="label label-warning") L
               a(href="/lists/#{list._id}")= list.name
+        hr.closeline
         h2 
           span(class="label label-success") R
         div.spacer
         p.lead Reviews
-        hr
         ul
           - each review in reviews
             li.lm
               span(class="label label-success") R
               a(href="/reviews/#{review._id}")= review.title
+        hr.closeline
       div.col-md-4
         h2 
           span(class="label label-info") N
         div.spacer
         p.lead Notes
-        hr
         ul
           - each note in notes
             li.lm
               span(class="label label-info") N
               a(href="/notes/#{note._id}")= note.name
+        hr.closeline
         h2 
           span(class="label label-danger") Rq
         div.spacer
         p.lead Requests
-        hr
         ul
           - each quest in quests
             li.lm
               span(class="label label-danger") Rq
               a(href="/requests/#{quest._id}")= quest.name
+        hr.closeline
 
         

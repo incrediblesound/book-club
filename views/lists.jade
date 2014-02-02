@@ -23,9 +23,8 @@ block content
             br
             input.lm(type='submit' class="btn btn-default" value="make list")
       div.col-md-4
-      h2 Your Lists
-      hr
-      - each list in lists
-        h3
-          span(class="label label-info")= list.name         
-          a(href="/lists/#{list._id}")  Take a look
+        h2 Your Lists
+        hr
+        - each list in lists
+          h3
+            a(href="/lists/#{list._id}" class="label label-info")= list.name
