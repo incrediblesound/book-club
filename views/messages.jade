@@ -19,7 +19,7 @@ block content
             p <strong>From:</strong> #{message.sender}
           div(style='float:right')
             a(href='/messages/delete/#{message._id}' class='btn btn-danger') Delete
-            a.padleft(htef='/messages/#{message._id}' class='btn btn-success') View
+            a.padleft(href='/messages/#{message._id}' class='btn btn-success') View
         hr.closeline
     div.col-md-6
       h1 Send a new message:
@@ -28,4 +28,4 @@ block content
           - each friend in fllwng
             p= friend.name
               input(type="checkbox" name="sendto" value="#{friend.username}")
-        input(type="submit" class="btn btn-default" value="Compose")
+          input(type="submit" class="btn btn-default" value="Compose")

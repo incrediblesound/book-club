@@ -12,7 +12,6 @@ block content
     div.row
       div.col-md-6
         h1= list.name
-        h3 By #{list.listby}
         hr
         - for(i=0;i<list.items.length;i++)
           p.lead <strong>#{i+1})</strong> #{list.items[i].title}
@@ -27,4 +26,3 @@ block content
           div
             p(class='lead pull-left') list by user #{list.listby}
             a(href='/profile/#{list.listby}' class='btn btn-default pull-right') View profile
-        hr.closeline

@@ -13,7 +13,14 @@ var message = mongoose.model('message');
 var quest = mongoose.model('quest');
 
 exports.title = function(req, res) {
-	res.render('title')
+  action.find({category:"review"}).sort({DateTime:-1}).limit(3).exec(function (err, reviews) {
+    action.find({category:"list"}).sort({DateTime:-1}).limit(3).exec(function (err, lists) {
+      res.render('title', {
+        reviews: reviews,
+        lists: lists
+      })
+    })
+  })
 };
 
 exports.index = function(req, res) {
@@ -85,6 +92,10 @@ exports.unfollow = function(req, res) {
   })
 }
 
+exports.about = function(req, res) {
+  res.render('about');
+};
+
 exports.main = function(req, res) {
 if(!req.user) {
   res.redirect('/');
@@ -116,7 +127,8 @@ if(!req.user) {
       res.render('main', {
       user: req.user,
       actionList: actionList,
-      messages: count
+      messages: count,
+      empty: empty
       });
     })
   })
@@ -515,6 +527,9 @@ listObject = function(title,author,url,description){
 }
 
 var inArray = function(item, array) {
+  if(!array) {
+    return false
+  }
   for(i=0;i<array.length;i++) {
     if(array[i] === item) {
       return true;
@@ -546,3 +561,10 @@ var genresArray = [
 "technology",
 "blog"
 ]
+
+var empty = {
+  message: "If you see this message, it's because your news feed is empty. There are a number of reasons why this could be the case:",
+  one: "You aren't following anybody. Search for some content, find a reviewer you like and follow them",
+  two: "There is no content yet in your field of interest. Now is your chance to break ground and contribute some quality reviews to Book Club.",
+  three: "You did not select any genres when you filled out your member information. I have not yet implemented a feature to solve this problem, but following the advice above will fill this empty space right quick!"
+}

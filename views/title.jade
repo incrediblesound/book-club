@@ -53,3 +53,27 @@ block content
           div.form-group
             input(type='password' class="form-control" placeholder="password" name='password' width="200")
           input(type='submit' class="btn btn-success" value='login')
+    div.row
+      hr
+      div.col-md-6
+        h2(style="text-align:center;") Newest Reviews
+        - each review in reviews
+          div.news
+            h2
+              span(class="label label-primary tab") R
+            p= review.description
+            p On 
+              = review.DateTime
+              a(href='reviews/#{review.actionRef}')  Check it out
+            hr
+      div.col-md-6
+        h2(style="text-align:center;") Newest Lists
+        - each list in lists
+          div.news
+            h2
+              span(class="label label-warning tab") L 
+            p= list.description
+            p On 
+              = list.DateTime
+                a(href='lists/#{list.actionRef}')  Take a look
+            hr

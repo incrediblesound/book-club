@@ -17,14 +17,14 @@ block content
         p= review.review
         hr
         - if(review.url.length > 0)
-          p URL: #{review.url}
+          p URL: 
+            a(href='#{review.url}')= review.url
       div.col-md-6
         div.spacer
         div.row
           div
             p(class='lead pull-left') Review by user #{review.reviewby}
-            - if(review.reviewby !== user.username)
-              a(href='/profile/#{review.reviewby}' class='btn btn-default pull-right') View profile
+            a(href='/profile/#{review.reviewby}' class='btn btn-default pull-right') View profile
         hr.closeline
         div.spacer
         p.lead Genre: #{review.genre}

@@ -8,6 +8,8 @@ block content
         li.active 
           a Home
         li
+          a(href='/about') About
+        li
           a(href='/logout') Log out
         li
           a(href='/following') Friends
@@ -16,12 +18,19 @@ block content
             input(type="text" class="form-control" name = 'query' placeholder="Search")
           button(type="submit" class="btn btn-default") Search
     div.row
-    div.col-md-8      
-      h1 Welcome 
-        =user.name
-        a(class="btn btn-default btn-lg" href='/profile/#{user.username}' style="float:right;") Profile
+    div.col-md-8  
+      hgroup    
+        h1.center-text Welcome 
+          =user.name
+          a(class="btn btn-default btn-lg" href='/profile/#{user.username}' style="float:right;") Profile
       hr
       div.newfeed
+        - if(actionList.length === 0)
+          p.lead= empty.message
+          ol
+            li=empty.one
+            li=empty.two
+            li=empty.three
         - each action in actionList
           - if(action.category === 'review')
             div.news
