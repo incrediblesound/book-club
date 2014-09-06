@@ -1,6 +1,14 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Lucida Grande","PT Serif", Helvetica, Arial, sans-serif;
+}
+
+.PT {
+	font-family: "PT Serif", serif;
+}
+
+h2.PT {
+	font-family: "PT Serif", serif;
 }
 
 a {
@@ -70,4 +78,12 @@ h2 {
 	border-radius: 6px;
 	padding: 6px;
 	margin-bottom: 8px;
+}
+
+.profile-box {
+	padding: 4px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	border-radius: 6px;
 }

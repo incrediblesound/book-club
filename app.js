@@ -65,6 +65,7 @@ app.post('/register', routes.register);
 app.get('/memberinfo', routes.memberinfo);
 app.post('/saveinfo', routes.saveinfo);
 app.get('/main', routes.main);
+app.get('/about', routes.about)
 app.get('/notes', routes.notes);
 app.post('/savenote', routes.savenote);
 app.get('/requests', routes.requests);

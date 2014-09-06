@@ -9,69 +9,65 @@ block content
           a(href='/main') Home
         li
           a(href='/logout') Log out
-    h1(style="text-align:center;")= Member.name
+    h1.PT(style="text-align:center;")= Member.name
       's profile
     hr
     div.spacer
     div.row
       div.col-md-4
-        h2 About me:
-        p= Member.bio
+        h2.PT About me:
+        p.PT= Member.bio
         - if(Member.username !== user.username)
           form(method='post' action='/follow')
             input(type='hidden' value='#{Member.username}' name='member')
             input(type='submit' class="btn btn-success lm" value='follow')
         - if(Member.genres.length > 0)
-          h2 Interests:
+          h2.PT Interests:
           ul
             - each genre in Member.genres
               li= genre
         - if(!(Member.authors.length === 1 && Member.authors[0] === ""))
-          h2 Favorite authors:
+          h2.PT Favorite authors:
           ul
             - each author in Member.authors
               li= author
       div.col-md-4
-        h2 
-          span(class="label label-warning") L
-        div.spacer
-        p.lead Lists
-        ul
-          - each list in lists
-            li.lm
-              span(class="label label-warning") L
-              a(href="/lists/#{list._id}")= list.name
+        div.profile-box
+          h2 
+            span(class="label label-warning pull-left") L
+          p(class='lead text-center') Lists
+          ul
+            - each list in lists
+              li.lm
+                a(href="/lists/#{list._id}")= list.name
         hr.closeline
-        h2 
-          span(class="label label-success") R
-        div.spacer
-        p.lead Reviews
-        ul
-          - each review in reviews
-            li.lm
-              span(class="label label-success") R
-              a(href="/reviews/#{review._id}")= review.title
+        div.profile-box
+          h2 
+            span(class="label label-success pull-left") R
+          p(class='lead text-center') Reviews
+          ul
+            - each review in reviews
+              li.lm
+                a(href="/reviews/#{review._id}")= review.title
         hr.closeline
       div.col-md-4
-        h2 
-          span(class="label label-info") N
-        div.spacer
-        p.lead Notes
-        ul
-          - each note in notes
-            li.lm
-              span(class="label label-info") N
-              a(href="/notes/#{note._id}")= note.name
+        div.profile-box
+          h2 
+            span(class="label label-info pull-left") N
+          p(class='lead text-center') Notes
+          ul
+            - each note in notes
+              li.lm
+                a(href="/notes/#{note._id}")= note.name
         hr.closeline
-        h2 
-          span(class="label label-danger") Rq
-        div.spacer
-        p.lead Requests
-        ul
-          - each quest in quests
-            li.lm
-              span(class="label label-danger") Rq
-              a(href="/requests/#{quest._id}")= quest.name
+        div.profile-box
+          h2 
+            span(class="label label-danger pull-left") Rq
+          p(class='lead text-center') Requests
+          ul
+            - each quest in quests
+              li.lm
+                a(href="/requests/#{quest._id}")= quest.name
         hr.closeline
 
         
