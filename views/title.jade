@@ -63,7 +63,7 @@ block content
               span(class="label label-primary tab") R
             p= review.description
             p On 
-              = review.DateTime
+              = review.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
               a(href='reviews/#{review.actionRef}')  Check it out
             hr
       div.col-md-6
@@ -74,6 +74,6 @@ block content
               span(class="label label-warning tab") L 
             p= list.description
             p On 
-              = list.DateTime
+              = list.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
                 a(href='lists/#{list.actionRef}')  Take a look
             hr

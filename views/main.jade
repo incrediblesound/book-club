@@ -37,8 +37,7 @@ block content
               h2
                 span(class="label label-primary tab") R
               p= action.description
-              p On 
-                = action.DateTime
+              p= action.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
                 a(href='reviews/#{action.actionRef}')  Check it out
               hr
           - if(action.category === 'list')
@@ -46,8 +45,7 @@ block content
               h2
                 span(class="label label-warning tab") L 
               p= action.description
-              p On 
-                = action.DateTime
+              p= action.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
                 a(href='lists/#{action.actionRef}')  Take a look
               hr
           - if(action.category === 'request')
@@ -55,8 +53,7 @@ block content
               h2
                 span(class="label label-danger tab") Rq 
               p= action.description
-              p On 
-                = action.DateTime
+              p= action.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
                 a(href='requests/#{action.actionRef}')  Lend a hand
               hr
           - if(action.category === 'note')
@@ -64,8 +61,7 @@ block content
               h2
                 span(class="label label-info tab") N
               p= action.description
-              p On 
-                = action.DateTime
+              p= action.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
                 a(href='notes/#{action.actionRef}')  See whats up
               hr
           - if(action.category === 'follow')
@@ -73,8 +69,7 @@ block content
               h2
                 span(class='label label-success tab') F
               p= action.description
-              p On
-                = action.DateTime
+              p= action.DateTime.toString().split(/\d\d\:\d\d\:\d\d/)[0]
                 a(href='profile/#{action.whodunnit}')  Follow them back
     div.col-md-4
       div.spacer

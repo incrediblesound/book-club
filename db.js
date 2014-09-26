@@ -111,5 +111,5 @@ var quest = mongoose.model('quest', Quest);
 
 var message = mongoose.model('message', Message);
 
-//mongoose.connect('mongodb://localhost/book');
-mongoose.connect('mongodb://nodejitsu:f305f329284510303e0b5171ba9c4062@troup.mongohq.com:10066/nodejitsudb1283180546/book-club');
+var connection = process.env.DB || 'mongodb://localhost/book';
+mongoose.connect(connection);

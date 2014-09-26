@@ -138,7 +138,7 @@ if(!req.user) {
 exports.follow = function(req, res) {
   var Member = req.body.member
   if(req.user.username !== Member && !inArray(Member, req.user.following)) {
-    member.update({username: req.user.username}, {$push: {following: Member}}).exec(function (err, data) {
+    member.update({username: req.user.username}, {$addToSet: {following: Member}}).exec(function (err, data) {
       new action({
         DateTime: Date.now(),
         whodunnit: req.user.username,
